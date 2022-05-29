@@ -1,16 +1,16 @@
 # HACK.INI 10th edition 2022
 
-## author : Aghiles Gharbi
+**Author : Aghiles Gharbi**
 
-## teamName : AnonyBlasBlas
+**TeamName : AnonyBlasBlas**
 
-## junior : 2nd place
+**Junior : 2nd place**
 
-## senior : 5th place
+**Senior : 5th place**
 
-## individual : 5th
+**Individual : 5th**
 
-## team members:
+**team members:**
 
 > Aghiles Gharbi
 
