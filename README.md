@@ -1,6 +1,9 @@
-# Web
 
-## baby lfi
+
+
+## Web
+
+### baby lfi
 
 > Author : Anis Chebah
 
@@ -15,7 +18,7 @@ so the solutuin was just giving the file to read in the language parameter.
 
 > flag: shellmates{10CA1_F11e_1Nc1US10n_m4y_r3ve4l_in7Er3st1nG_iNf0Rm4t1on}
 
-## lfi
+### lfi
 
 > Author : Anis Chebah
 
@@ -29,7 +32,7 @@ The website has a simple basic lfi (local file inclusion) in the 'language' GET 
 
 > flag: shellmates{SH0uLD_H4Ve_MadE_th3_checK_recuRS1V3}
 
-## baby lfi 2
+### baby lfi 2
 
 > Author : Anis Chebah
 
@@ -44,7 +47,7 @@ So the solutuin was just giving the file to read in the language parameter.
 
 > flag: shellmates{yOU_M4De_yOUr_waY_7hRough_iT}
 
-## HEADache
+### HEADache
 
 > Author : Muhammad
 
@@ -60,7 +63,7 @@ The challenge is simple flask web app, as we can see in the app.py it check for 
 
 > flag : shellmates{hTTp_H34d37R5_&_p0L173N355_c4n_B3_U53FULL}
 
-## Whois 
+### Whois 
 
 > Author : souad
 
@@ -87,7 +90,7 @@ if we read a little bit about the [PRCE modifiers (pattern modifiers)](https://w
 
 > flag: shellmates{i_$h0U1D_HaVE_R3AD_7HE_dOc_W3Ll}
 
-## Whois fixed
+### Whois fixed
 
 A web-based Whois service
 Note : There was a problem with the first version, this is the fixed version.
@@ -104,7 +107,7 @@ In this challenge they just renamed the flag we can notice that by executing 'ls
 > flag : shellmates{i_$h0U1D_HaVE_R3AD_7HE_dOc_W3Ll_9837432986534065}
 
 
-## nextGen 1
+### nextGen 1
 
 simple monitoring app.
 
@@ -122,7 +125,7 @@ The challenge was simple monitoring app, we notice that when we click on a depar
 
 > flag : shellmates{1T_W4S_4_qu1T3_3s4y_expl01tabL3_$$Rf}
 
-## nextGen 2 
+### nextGen 2 
 
 We added some filters now.
 
